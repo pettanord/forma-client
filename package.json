@@ -1,0 +1,50 @@
+{
+  "name": "@forma/client",
+  "version": "0.1.0",
+  "description": "The shared layer every Forma site frontend is built on: typed content queries, section rendering, the build-time section sync, and the revalidation receiver.",
+  "type": "module",
+  "license": "UNLICENSED",
+  "private": false,
+  "files": [
+    "dist",
+    "bin",
+    "README.md"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./rich-text": {
+      "types": "./dist/rich-text.d.ts",
+      "default": "./dist/rich-text.js"
+    },
+    "./revalidate": {
+      "types": "./dist/revalidate.d.ts",
+      "default": "./dist/revalidate.js"
+    }
+  },
+  "bin": {
+    "forma-sync-sections": "bin/forma-sync-sections.mjs"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "prepare": "npm run build"
+  },
+  "peerDependencies": {
+    "@supabase/supabase-js": "^2",
+    "react": ">=18"
+  },
+  "peerDependenciesMeta": {
+    "react": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "@supabase/supabase-js": "^2",
+    "@types/react": "^19",
+    "react": "^19",
+    "react-dom": "^19",
+    "typescript": "^5"
+  }
+}
