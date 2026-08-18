@@ -49,6 +49,21 @@ if (!Array.isArray(sections)) {
   process.exit(1);
 }
 
+// Next.js loads .env.local itself, but npm lifecycle scripts don't — so a
+// local `npm run build` would miss vars that Vercel provides through the
+// environment. Fill in the gaps from .env.local/.env without overriding
+// anything already exported.
+for (const envFile of [".env.local", ".env"]) {
+  const path = resolve(envFile);
+  if (!existsSync(path)) continue;
+  for (const line of (await readFile(path, "utf8")).split("\n")) {
+    const match = line.match(/^([A-Z0-9_]+)=(.*)$/);
+    if (match && process.env[match[1]] === undefined) {
+      process.env[match[1]] = match[2].replace(/^["']|["']$/g, "");
+    }
+  }
+}
+
 const formaApiUrl =
   process.env.NEXT_PUBLIC_FORMA_API_URL ?? process.env.FORMA_API_URL;
 const siteId =
