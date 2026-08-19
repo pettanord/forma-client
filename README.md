@@ -111,6 +111,12 @@ never registers is a slot nobody can edit.
 Sections removed from the manifest are flagged as orphaned in Forma,
 never deleted — the customer's written content survives refactors.
 
+Each section may declare `page: "Om oss"` (the display name of the page
+it sits on — Forma groups /pages by it) and `locale: "sv"` (the language
+of its copy — a bilingual site declares one section per locale, and Forma
+turns the tags into language tabs). Both optional: without them the
+section lists flat, like before the fields existed.
+
 ## 4. Receiving revalidation
 
 When an editor saves in Forma, Forma POSTs to the site so the change shows

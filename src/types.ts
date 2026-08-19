@@ -35,6 +35,18 @@ export interface SectionDefinition {
   description?: string;
   /** Site-relative path where the section renders, e.g. "/kontakt". */
   previewPath?: string;
+  /**
+   * Display name of the page this section sits on ("Om oss"). Sections
+   * sharing a page are grouped under it in the Forma /pages admin;
+   * without it the section lists flat.
+   */
+  page?: string;
+  /**
+   * ISO 639-1 language of this section's copy ("sv", "en"). A bilingual
+   * site declares one section per locale and tags each — Forma turns
+   * that into language tabs. Unset = every language.
+   */
+  locale?: string;
   fields: SectionField[];
 }
 
