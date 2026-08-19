@@ -52,6 +52,25 @@ await forma.api("/api/contact", { email, message });
 Every query is filtered on `siteId` inside the package — the shared
 database holds other sites' content too, and that filter is not optional.
 
+Resolve section fields over your static copy with the bundled helpers —
+"the Forma value when set, else the site's own fallback", per field:
+
+```ts
+import { sText, sImage, sRich, sParagraphs } from "@forma/client";
+
+const hero = {
+  title: sText(section, "title", copy.hero.title),
+  photo: sImage(section, "photo", "/uploads/hero.jpg"), // http(s) or fallback
+  body: sRich(section, "body"),                 // Tiptap doc or null
+  paragraphs: sParagraphs(section, "body"),     // plain strings or null
+};
+```
+
+The site renders identically until someone edits, and clearing a field in
+Forma restores the original. For `sImage`, give the `<img>` frame
+`object-fit: cover` + a fixed aspect ratio so any uploaded image sits in
+the design.
+
 ## 2. Rendering richtext
 
 Forma's editors store Tiptap JSON. Render it with the shared component
