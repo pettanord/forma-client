@@ -1,6 +1,7 @@
 export { createForma, type Forma, type FormaConfig } from "./client.js";
 export { defineSections, syncSections, type SyncOptions, type SyncResult } from "./sync.js";
 export { sText, sImage, sRich, sParagraphs } from "./sections.js";
+export { videoEmbedSrc, type FormaVideo } from "./video.js";
 export type {
   CarouselSlide,
   Course,

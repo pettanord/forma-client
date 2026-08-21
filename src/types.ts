@@ -108,6 +108,10 @@ export interface Course {
   features: string[];
   price_cents: number | null;
   coming_soon: boolean;
+  /** Public trailer: platform + id (render with videoEmbedSrc). The
+   *  promo_vimeo_id column is the legacy fallback, still set for Vimeo. */
+  promo_video_provider?: "vimeo" | "youtube" | null;
+  promo_video_id?: string | null;
   promo_vimeo_id: string | null;
   position: number;
   access_type: "free" | "paid" | "planning_center_group";

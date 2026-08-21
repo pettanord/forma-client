@@ -1,6 +1,6 @@
 {
   "name": "@forma/client",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "The shared layer every Forma site frontend is built on: typed content queries, section rendering, the build-time section sync, and the revalidation receiver.",
   "type": "module",
   "license": "UNLICENSED",

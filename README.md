@@ -86,6 +86,26 @@ const metaDescription = richTextToPlainText(post.body).slice(0, 160);
 Unknown node types render their children as readable text — a Forma
 upgrade must never leave a hole in a page that hasn't updated the package.
 
+## 2b. Rendering course & lesson videos
+
+Forma videos live on Vimeo, YouTube, or the site's own Vimeo OTT library.
+`videoEmbedSrc` turns any Forma video shape — a `/api/courses/lesson`
+response, or an anon-readable lesson/course row — into the iframe src (or
+null when there is nothing to play):
+
+```tsx
+import { videoEmbedSrc } from "@forma/client";
+
+const src = videoEmbedSrc(lesson);
+{src && <iframe src={src} allow="autoplay; fullscreen" allowFullScreen />}
+```
+
+It handles the unlisted-Vimeo `id/hash` form (`?h=`), uses YouTube's
+nocookie host with `rel=0`, and for OTT returns the API-minted per-viewer
+`embed_url` — OTT playback is an expiring authorization, so there is never
+a static URL to build client-side. Build new course pages on this helper
+and every current and future provider works from day one.
+
 ## 3. Declaring editable sections (build-time sync)
 
 The frontend is the thing that knows which editable slots it renders, so
@@ -166,5 +186,7 @@ a slot the customer emails about for the next three years.
 - Section manifest shape ⇄ `forma-cms/lib/page-sections/schema.ts`
 - Revalidation POST shape ⇄ `forma-cms/lib/revalidate.ts`
 - Content columns ⇄ `forma-cms/schema.sql`
+- Video shape & embed URLs ⇄ `forma-cms/lib/video-embed.ts` +
+  `/api/courses/lesson` (`video_provider`/`video_id`/`embed_url`)
 
 A change on either side of any of these updates both repos in one breath.
