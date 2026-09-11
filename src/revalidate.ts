@@ -5,7 +5,7 @@
 //   POST /api/revalidate
 //   x-forma-secret: <site_integrations.revalidate_secret>
 //   { "site_id": "...", "kind": "post" | "page-section" | "theme" |
-//     "carousel" | "course" | "product", "key"?: "..." }
+//     "carousel" | "course" | "product" | "homepage", "key"?: "..." }
 //
 // Drop this in a site frontend as app/api/revalidate/route.ts:
 //
@@ -20,7 +20,10 @@ export type RevalidateKind =
   | "theme"
   | "carousel"
   | "course"
-  | "product";
+  | "product"
+  // Shop → Homepage layout saved (the front page; the root layout
+  // revalidation already covers it, an entry adds precision only).
+  | "homepage";
 
 export interface RevalidateHandlerOptions {
   /** Must equal the site's revalidate_secret in Forma. */
