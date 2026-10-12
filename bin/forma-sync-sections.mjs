@@ -36,15 +36,19 @@ if (!manifestPath) {
   process.exit(1);
 }
 
-let sections;
+let manifest;
 if (manifestPath.endsWith(".json")) {
-  sections = JSON.parse(await readFile(manifestPath, "utf8"));
+  manifest = JSON.parse(await readFile(manifestPath, "utf8"));
 } else {
-  sections = (await import(pathToFileURL(manifestPath).href)).default;
+  manifest = (await import(pathToFileURL(manifestPath).href)).default;
 }
+// Either a bare array of sections, or { scope, sections } when this
+// frontend shares its Forma site with another (see defineManifest).
+const sections = Array.isArray(manifest) ? manifest : manifest?.sections;
+const manifestScope = Array.isArray(manifest) ? undefined : manifest?.scope;
 if (!Array.isArray(sections)) {
   console.error(
-    "forma-sync-sections: the manifest must export an array of sections (default export)."
+    "forma-sync-sections: the manifest must export an array of sections, or { scope, sections } (default export)."
   );
   process.exit(1);
 }
@@ -84,9 +88,11 @@ if (!secret) {
 }
 
 try {
-  const result = await syncSections({ formaApiUrl, siteId, secret, sections });
+  const scope = process.env.FORMA_SECTION_SCOPE || manifestScope || undefined;
+  const result = await syncSections({ formaApiUrl, siteId, secret, sections, scope });
   console.log(
     `forma-sync-sections: synced ${result.synced} section(s)` +
+      (scope ? ` [scope ${scope}]` : "") +
       (result.orphaned ? `, ${result.orphaned} orphaned` : "") +
       ` — ${result.sections.join(", ")}`
   );

@@ -18,6 +18,24 @@ export interface SyncOptions {
   siteId: string;
   secret: string;
   sections: SectionDefinition[];
+  /**
+   * Which frontend this manifest belongs to, when a site row serves more
+   * than one (a church's main site and its conference site). Forma only
+   * orphans sections of the same scope, so each frontend's deploy leaves
+   * the other's sections alone. Unset = the site's main frontend.
+   */
+  scope?: string;
+}
+
+/** A manifest file may export this instead of a bare array, to set a scope. */
+export interface SectionManifest {
+  scope?: string;
+  sections: SectionDefinition[];
+}
+
+/** Identity with types for a scoped manifest (`export default defineManifest({...})`). */
+export function defineManifest(manifest: SectionManifest): SectionManifest {
+  return manifest;
 }
 
 export interface SyncResult {
@@ -34,7 +52,11 @@ export async function syncSections(options: SyncOptions): Promise<SyncResult> {
       "Content-Type": "application/json",
       "x-forma-secret": options.secret,
     },
-    body: JSON.stringify({ site_id: options.siteId, sections: options.sections }),
+    body: JSON.stringify({
+      site_id: options.siteId,
+      sections: options.sections,
+      ...(options.scope ? { scope: options.scope } : {}),
+    }),
   });
   const json = (await response.json().catch(() => null)) as
     | (SyncResult & { error?: string })
