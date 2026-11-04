@@ -1,5 +1,5 @@
 // Renders the Tiptap JSON that Forma's editors produce (StarterKit + Link +
-// Image) as React elements. One renderer for every site frontend, so a new
+// Image + the HTML block) as React elements. One renderer for every site frontend, so a new
 // node type is added HERE once — not re-implemented per church.
 //
 // Unknown node types render their children rather than nothing: a Forma
@@ -90,6 +90,15 @@ function renderNode(node: TiptapNode): ReactNode {
       const src = String(node.attrs?.src ?? "");
       if (!src) return null;
       return <img src={src} alt={String(node.attrs?.alt ?? "")} />;
+    }
+    case "htmlBlock": {
+      // Forma's HTML block: hand-written markup (a designed programme box,
+      // an embed) that the structured schema can't express. Forma strips
+      // scripts and event handlers on save; it is rendered as written so
+      // the author's layout and <style> survive.
+      const html = String(node.attrs?.html ?? "");
+      if (!html.trim()) return null;
+      return <div className="html-block" dangerouslySetInnerHTML={{ __html: html }} />;
     }
     default:
       // Unknown node (a future Forma feature): render what's inside it.
