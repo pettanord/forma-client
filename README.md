@@ -123,6 +123,9 @@ export default defineSections([
       { key: "heading", label: "Rubrik", type: "text",
         hint: "Den stora raden överst." },
       { key: "image", label: "Bakgrundsbild", type: "image" },
+      // A layout choice editors (and Forma's AI editor) may flip — no code change:
+      { key: "layout", label: "Bildens placering", type: "select",
+        options: [{ value: "image-left", label: "Bild till vänster" }, { value: "image-right", label: "Bild till höger" }] },
     ],
   },
 ]);

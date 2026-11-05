@@ -68,3 +68,18 @@ export function sParagraphs(
   }
   return paragraphs.length > 0 ? paragraphs : null;
 }
+
+/**
+ * A `select` field: the stored choice when it is one of the allowed values,
+ * else the fallback. `allowed` is the same list the manifest declares, so a
+ * value from an older manifest can never reach the layout switch.
+ */
+export function sSelect<T extends string>(
+  section: SectionContent | null,
+  key: string,
+  allowed: readonly T[],
+  fallback: T
+): T {
+  const value = section?.[key];
+  return typeof value === "string" && (allowed as readonly string[]).includes(value) ? (value as T) : fallback;
+}

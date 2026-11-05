@@ -12,7 +12,7 @@ export type TiptapNode = {
   content?: TiptapNode[];
 };
 
-export type SectionFieldType = "text" | "richtext" | "image" | "url";
+export type SectionFieldType = "text" | "richtext" | "image" | "url" | "select";
 
 export interface SectionField {
   /** lowercase-with-dashes — it becomes the content key. */
@@ -21,6 +21,13 @@ export interface SectionField {
   type: SectionFieldType;
   /** Shown under the field in the Forma editor. Write it for a volunteer. */
   hint?: string;
+  /**
+   * `select` only: the choices. This is how a frontend exposes a LAYOUT
+   * decision to editors (and to Forma's AI editor) without a code change —
+   * "image left / right", "two or three columns". The stored value is one
+   * of the `value`s; unset = the frontend's default. Read it with sSelect().
+   */
+  options?: { value: string; label: string }[];
 }
 
 /**
